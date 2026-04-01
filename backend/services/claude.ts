@@ -25,13 +25,13 @@ export async function analyzeMarket(market: any) {
           Current NO price: ${market.no_ask} cents
           Closes: ${market.close_time}
 
-          Based on your knowledge of this topic:
+          Based on your knowledge of this topic and only current/very recent news from reputable sources:
         1. What do you think the real probability of YES is?
-        2. Is the market mispriced? By how much?
+        2. Is the market mispriced? By how much? (difference between real probability and current price)
         3. Should I bet YES, NO, or skip this market entirely?
         4. How confident are you in this assessment? (low/medium/high)
-        5. Brief reasoning for your recommendation.
-        Be direct and specific. Only recommend a trade if there is a clear edge and great chance of winning.`,
+        5. Brief reasoning for your recommendation and One sentence reasoning citing your source.
+        Be direct and specific. Only recommend a trade if the edge is greater than 15 percentage points. Otherwise say SKIP.`,
         },
       ],
     });
