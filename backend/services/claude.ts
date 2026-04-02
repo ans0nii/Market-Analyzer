@@ -24,6 +24,8 @@ export async function analyzeMarket(market: any) {
           (implies ${parseFloat(market.yes_bid_dollars) * 100}% probability) 
           Current NO price: ${market.no_ask_dollars} dollars
           Closes: ${market.close_time}
+          What YES means: ${market.yes_sub_title}
+          What NO means: ${market.no_sub_title}
 
           Based on your knowledge of this topic and only current/very recent news from reputable sources:
         1. What do you think the real probability of YES is?
@@ -31,6 +33,10 @@ export async function analyzeMarket(market: any) {
         3. Should I bet YES, NO, or skip this market entirely?
         4. How confident are you in this assessment? (low/medium/high)
         5. Brief reasoning for your recommendation and One sentence reasoning citing your source.
+        The goal is to make as much money as possible but in a safe manner. So if a market has 70% on one side but 30% on the other
+        if that 30% is actually maybe 50% or higher in your evaluation I would like to be informed those are just example numbers, point is the lower percentage
+        is actually higher in your predicition.
+        For each market imagine you have 10 dollar budget (you do not have to use the entire budget), if you said YES take the trade how many dollars would you put on it. 
         Be direct and specific. Only recommend a trade if the edge is greater than 15 percentage points. Otherwise say SKIP.`,
         },
       ],
