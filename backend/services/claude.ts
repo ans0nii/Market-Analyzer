@@ -20,9 +20,9 @@ export async function analyzeMarket(market: any) {
       messages: [
         {
           role: "user",
-          content: `You are a prediction market analyst. Analyse this Kalshi market and tell me if theres a favorable trading oppurtunity. Market: ${market.title} Current YES price: ${market.yes_bid} cents. 
-          (implies ${market.yes_bid}% probability) 
-          Current NO price: ${market.no_ask} cents
+          content: `You are a prediction market analyst. Analyse this Kalshi market and tell me if theres a favorable trading oppurtunity. Market: ${market.title} Current YES price: ${market.yes_bid_dollars} cents. 
+          (implies ${parseFloat(market.yes_bid_dollars) * 100}% probability) 
+          Current NO price: ${market.no_ask_dollars} dollars
           Closes: ${market.close_time}
 
           Based on your knowledge of this topic and only current/very recent news from reputable sources:
@@ -36,7 +36,11 @@ export async function analyzeMarket(market: any) {
       ],
     });
 
-    return response.content[0];
+    const textBlocks = response.content
+      .filter((block) => block.type === "text")
+      .map((block) => (block.type === "text" ? block.text : ""))
+      .join("\n");
+      return textBlocks
   } catch (error) {
     console.error("Claude API error:", error);
     throw error;
