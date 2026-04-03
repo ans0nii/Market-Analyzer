@@ -17,19 +17,32 @@ analysisRouter.get("/", async (_req: Request, res: Response) => {
       return;
     }
 
+    const shuffled = [...tickers].sort(() => Math.random() - 0.5);
+
     const markets = await Promise.all(
-      tickers.slice(0, 5).map((ticker: any) => getMarket(ticker)),
+      shuffled.slice(0, 20).map((ticker: any) => getMarket(ticker)),
     );
 
-    const activeMarkets = markets.filter(
-      (market: any) => market && market.status === "active",
-    );
+    const activeMarkets = markets.filter((market: any) => {
+      if (!market || market.status !== "active") return false;
+      const expiration = new Date(market.expected_expiration_time);
+      const now = new Date();
+      const today = new Date();
+      const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+      return (
+        expiration.toDateString() === today.toDateString() &&
+        expiration > twoHoursFromNow
+      );
+    });
 
-    console.log("Active markets count:", activeMarkets.length);
+    console.log("Active markets expiring today:", activeMarkets.length);
+
+    const marketsToAnalyze =
+      activeMarkets.length >= 5 ? activeMarkets.slice(0, 5) : activeMarkets;
 
     const batches = [];
-    for (let i = 0; i < activeMarkets.length; i += 1) {
-      batches.push(activeMarkets.slice(i, i + 1));
+    for (let i = 0; i < marketsToAnalyze.length; i += 1) {
+      batches.push(marketsToAnalyze.slice(i, i + 1));
     }
 
     const results = [];

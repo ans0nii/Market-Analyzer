@@ -20,24 +20,27 @@ export async function analyzeMarket(market: any) {
       messages: [
         {
           role: "user",
-          content: `You are a prediction market analyst. Analyse this Kalshi market and tell me if theres a favorable trading oppurtunity. Market: ${market.title} Current YES price: ${market.yes_bid_dollars} cents. 
-          (implies ${parseFloat(market.yes_bid_dollars) * 100}% probability) 
-          Current NO price: ${market.no_ask_dollars} dollars
-          Closes: ${market.close_time}
-          What YES means: ${market.yes_sub_title}
-          What NO means: ${market.no_sub_title}
+          content: `You are a prediction market analyst. Analyse this Kalshi market and tell me if there is a favorable trading opportunity.
+      Market: ${market.title}
+      Current YES price: ${market.yes_bid_dollars} dollars (implies ${parseFloat(market.yes_bid_dollars) * 100}% probability)
+      Current NO price: ${market.no_ask_dollars} dollars
+      Closes: ${market.close_time}
+      What YES means: ${market.yes_sub_title}
+      What NO means: ${market.no_sub_title}
 
-          Based on your knowledge of this topic and only current/very recent news from reputable sources:
-        1. What do you think the real probability of YES is?
-        2. Is the market mispriced? By how much? (difference between real probability and current price)
-        3. Should I bet YES, NO, or skip this market entirely?
-        4. How confident are you in this assessment? (low/medium/high)
-        5. Brief reasoning for your recommendation and One sentence reasoning citing your source.
-        The goal is to make as much money as possible but in a safe manner. So if a market has 70% on one side but 30% on the other
-        if that 30% is actually maybe 50% or higher in your evaluation I would like to be informed those are just example numbers, point is the lower percentage
-        is actually higher in your predicition.
-        For each market imagine you have 10 dollar budget (you do not have to use the entire budget), if you said YES take the trade how many dollars would you put on it. 
-        Be direct and specific. Only recommend a trade if the edge is greater than 15 percentage points. Otherwise say SKIP.`,
+      Based on current and very recent news from reputable sources only:
+      1. What is the real probability of YES?
+      2. Is the market mispriced? By how much?
+      3. Should I bet YES, NO, or SKIP?
+      4. Confidence level: low/medium/high
+      5. One sentence reasoning citing your source.
+
+      Rules:
+      - Only recommend trades where the current market price is between 45% and 85%
+      - Markets below 45% or above 85% are always SKIP regardless of edge
+      - Only recommend a trade if edge is greater than 15 percentage points
+      - Take advantage of markets where the crowd is close but there a gaps in true value. In example, if a market has a 51% YES but in your recommendations it should be a 66% YES, inform me. 
+      - If recommending a trade, how much of a $10 budget would you allocate?`,
         },
       ],
     });
@@ -46,7 +49,7 @@ export async function analyzeMarket(market: any) {
       .filter((block) => block.type === "text")
       .map((block) => (block.type === "text" ? block.text : ""))
       .join("\n");
-      return textBlocks
+    return textBlocks;
   } catch (error) {
     console.error("Claude API error:", error);
     throw error;
