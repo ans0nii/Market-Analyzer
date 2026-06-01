@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 interface MarketResult {
   title: string;
@@ -10,6 +11,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const getReccomendation = (analysis: string): string => {
+    const match = analysis.match(/Recommendation:\s*(YES|NO|SKIP)/);
+    return match ? match[1] : "SKIP";
+  };
+
   const runAnalysis = async () => {
     try {
       setLoading(true);
@@ -18,7 +24,7 @@ function App() {
       if (!res.ok) throw new Error("Failed to fetch analysis");
       const data = await res.json();
       setResults(data);
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Try again.");
     } finally {
       setLoading(false);
@@ -26,18 +32,22 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app">
       <h1>Kalshi Market Analyzer</h1>
-      <button onClick={runAnalysis} disabled={loading}>
+      <button onClick={runAnalysis} disabled={loading} className="run_button">
         {loading ? "Analyzing..." : "Run analysis"}
       </button>
-      {error && <p>{error}</p>}
-      {results.map((result, index) => (
-        <div key={index}>
-          <h2>{result.title}</h2>
-          <p>{result.analysis}</p>
-        </div>
-      ))}
+      {error && <p className="error">{error}</p>}
+      {results.map((result, index) => {
+        const rec = getReccomendation(result.analysis);
+        return (
+          <div key={index} className="market-card">
+            <h2 className="market-title">{result.title}</h2>
+            <p className={`recommendation ${rec.toLowerCase()}`}>{rec}</p>
+            <p className="market-analysis">{result.analysis}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
