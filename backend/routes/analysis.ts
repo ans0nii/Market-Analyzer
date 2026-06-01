@@ -7,7 +7,28 @@ const analysisRouter = express.Router();
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const USE_MOCK = true;
+
 analysisRouter.get("/", async (_req: Request, res: Response) => {
+  if (USE_MOCK) {
+    const mockResults = [
+      {
+        title: "Will the Fed cut rates in June?",
+        analysis: `**Recommendation: YES**\n\nReal probability: 72%\nMarket price: 58% (mispriced by 14 points)\nConfidence: Medium\nAllocation: $4 of $10 budget\n\nReasoning: Recent Fed minutes suggest dovish pivot is likely per Reuters (May 28).`,
+      },
+      {
+        title: "Will Bitcoin close above $70k today?",
+        analysis: `**Recommendation: SKIP**\n\nReal probability: 48%\nMarket price: 51% (within edge threshold)\nConfidence: Low\nAllocation: $0\n\nReasoning: Market is fairly priced, insufficient edge to recommend a trade.`,
+      },
+      {
+        title: "Will the Dow Jones gain 1% today?",
+        analysis: `**Recommendation: NO**\n\nReal probability: 28%\nMarket price: 45% (mispriced by 17 points)\nConfidence: High\nAllocation: $6 of $10 budget\n\nReasoning: Futures down significantly this morning per Bloomberg (June 1).`,
+      },
+    ];
+    res.json(mockResults);
+    return;
+  }
+
   try {
     const tickers = await getMarkets();
     console.log("Traded markets found:", tickers?.length);
