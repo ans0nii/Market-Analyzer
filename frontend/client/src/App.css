@@ -214,4 +214,12 @@
 
 .market-analysis{
   color: white;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.market-card {
+  max-width: 800px;
+  margin: 0 auto 20px auto;
 }

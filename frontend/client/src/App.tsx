@@ -12,6 +12,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const getReccomendation = (analysis: string): string => {
+    if(!analysis) return "SKIP";
     const match = analysis.match(/Recommendation:\s*(YES|NO|SKIP)/);
     return match ? match[1] : "SKIP";
   };
@@ -20,6 +21,7 @@ function App() {
     try {
       setLoading(true);
       setError(null);
+      setResults([]);
       const res = await fetch("http://localhost:8080/analysis");
       if (!res.ok) throw new Error("Failed to fetch analysis");
       const data = await res.json();

@@ -7,7 +7,7 @@ const analysisRouter = express.Router();
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 analysisRouter.get("/", async (_req: Request, res: Response) => {
   if (USE_MOCK) {
