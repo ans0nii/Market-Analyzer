@@ -12,7 +12,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const getReccomendation = (analysis: string): string => {
-    if(!analysis) return "SKIP";
+    if (!analysis) return "SKIP";
     const match = analysis.match(/Recommendation:\s*(YES|NO|SKIP)/);
     return match ? match[1] : "SKIP";
   };
@@ -25,6 +25,7 @@ function App() {
       const res = await fetch("https://tunnel-production-8de9.up.railway.app/");
       if (!res.ok) throw new Error("Failed to fetch analysis");
       const data = await res.json();
+      console.log("Response:", data);
       setResults(data);
     } catch {
       setError("Something went wrong. Try again.");
