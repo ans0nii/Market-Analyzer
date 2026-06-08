@@ -22,7 +22,7 @@ function App() {
       setLoading(true);
       setError(null);
       setResults([]);
-      const res = await fetch("http://localhost:8080/analysis");
+      const res = await fetch("https://tunnel-production-8de9.up.railway.app/");
       if (!res.ok) throw new Error("Failed to fetch analysis");
       const data = await res.json();
       setResults(data);
